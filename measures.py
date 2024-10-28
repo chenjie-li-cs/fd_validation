@@ -29,6 +29,7 @@ def rho(df: pd.DataFrame, lhs: Any, rhs: Any) -> float:
 def g1(df: pd.DataFrame, lhs: Any, rhs: Any) -> float:
     """This measure is g_1 as proposed by [Kivinen & Mannila, 1995](https://doi.org/10.1016/0304-3975(95)00028-U)."""
     xy_counts = df.loc[:, [lhs, rhs]].value_counts().reset_index()
+    print(xy_counts)
     xy_counts.columns = [lhs, rhs, "xy_count"]
     x_counts = df.loc[:, lhs].value_counts().reset_index()
     x_counts.columns = [lhs, "x_count"]
@@ -53,7 +54,6 @@ def g1_prime(df: pd.DataFrame, lhs: Any, rhs: Any) -> float:
         violating_tuple_pairs
         / ((df.shape[0] ** 2) - (xy_counts["xy_count"].pow(2)).sum())
     )
-
 
 def shannon_g1(df: pd.DataFrame, lhs: Any, rhs: Any) -> float:
     """This measure calculates 1 - H_R(Y|X), where H_R is the conditional Shannon entropy."""
