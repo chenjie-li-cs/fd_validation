@@ -1,0 +1,10 @@
+Native_country, age, fnlwgt -> race
+age, education, fnlwgt -> race
+Education_num, age, fnlwgt -> race
+age, fnlwgt, occupation -> race
+age, fnlwgt, occupation -> sex
+age, fnlwgt, workclass -> race
+age, fnlwgt, relationship -> sex
+fnlwgt, occupation, relationship -> race
+education -> Education_num
+Education_num -> education

@@ -1,0 +1,29 @@
+# TABLES
+adult_sample.csv	1
+# COLUMN
+1.sex	10
+1.workclass	2
+1.education	4
+1.occupation	7
+1.age	1
+1.Hours_per_week	13
+1.class	15
+1.Marital_status	6
+1.race	9
+1.capital_gain	11
+1.Native_country	14
+1.Education_num	5
+1.relationship	8
+1.fnlwgt	3
+1.capital_loss	12
+# RESULTS
+14,1,3->9
+1,4,3->9
+5,1,3->9
+1,3,7->9
+1,3,7->10
+1,3,2->9
+1,3,8->10
+3,7,8->9
+4->5
+5->4

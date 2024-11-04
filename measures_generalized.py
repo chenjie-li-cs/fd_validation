@@ -47,6 +47,7 @@ def shannon_g1_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> floa
     x_counts = df.loc[:, lhs].value_counts().reset_index()
     x_counts.columns = lhs + ["x_count"]
     counts = xy_counts.merge(x_counts, on=lhs)
+    print(f'counts["x_count"]: {counts["x_count"]}')
     shannonYX = (
         -1.0
         * (
@@ -107,6 +108,7 @@ def fraction_of_information_general(df: pd.DataFrame,  lhs: List[Any], rhs: List
     x_counts = df.loc[:, lhs].value_counts().reset_index()
     x_counts.columns = lhs+["x_count"]
     counts = xy_counts.merge(x_counts, on=lhs)
+        
     shannonYX = (
         -1.0
         * (
@@ -135,6 +137,7 @@ def reliable_fraction_of_information_general(df: pd.DataFrame,  lhs: List[Any], 
                 m += p0 * (k1 / n) * math.log((k1 * n) / (a * b), 2)
                 k0 = k1
     fi_value = fraction_of_information_general(df, lhs, rhs)
+
     bias_estimator = m / (-1.0 * ((y_counts / n) * np.log2(y_counts / n)).sum())
     return fi_value - bias_estimator
 
@@ -210,6 +213,7 @@ def pdep_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
     x_counts = df.loc[:, lhs].value_counts().reset_index()
     x_counts.columns = lhs + ["x_count"]
     counts = xy_counts.merge(x_counts, on=lhs)
+
     return (1 / df.shape[0]) * (counts["xy_count"].pow(2) / counts["x_count"]).sum()
 
 
@@ -217,6 +221,7 @@ def tau_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
     """This measure is tau as defined by [Piatetsky-Shapiro & Matheus, 1993](https://www.aaai.org/Library/Workshops/1993/ws93-02-015.php)."""
     pdepXY = pdep_general(df, lhs, rhs)
     pdepY = pdep_self_general(df, rhs)
+
     return (pdepXY - pdepY) / (1 - pdepY)
 
 
@@ -226,9 +231,28 @@ def mu_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
     pdepY = pdep_self_general(df, rhs)
     r_size = df.shape[0]
     domX_size = df.loc[:, lhs].nunique()
+
     return 1.0 - ((1 - pdepXY) / (1 - pdepY)) * ((r_size - 1) / (r_size - domX_size)).values[0]
 
 
 def mu_plus_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
     """This measure is mu redefined by us to result in a score in the range [0;1]."""
     return max(0.0, mu_general(df, lhs, rhs))
+
+
+measures_dict = {
+    'rho': rho_general,
+    'g1': g1_general,
+    'g1_prime': g1_prime_general,
+    'shannon_g1': shannon_g1_general,
+    'shannon_g1_plus': shannon_g1_plus_general,
+    'g2': g2_general,
+    'g3': g3_general,
+    'g3_prime': g3_prime_general,
+    'fraction_of_information': fraction_of_information_general,
+    'reliable_fraction_of_information': reliable_fraction_of_information_general,
+    'pdep': pdep_general,
+    'tau': tau_general,
+    'mu': mu_general,
+    'mu_plus' :mu_plus_general
+}
