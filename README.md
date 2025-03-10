@@ -45,5 +45,7 @@ To run the evaluation, follow these steps:
 
 1. Place your dataset and FD files inside `dataset/your_dataset/`.
 2. Ensure the FDs are in the correct format (either handwritten or HyFD output).
-3. Execute the evaluation script (details on running the script to be added).
+3. Open and execute **[EvaluateFDsWithMeasures.ipynb](EvaluateFDsWithMeasures.ipynb)**, which serves as the main entry point for evaluating FDs.
+
+---
 
