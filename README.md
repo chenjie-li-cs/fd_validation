@@ -39,22 +39,6 @@ There are two ways to run the evaluation:
 ### 4️⃣ **Other FD Sources**
 - If your FDs come from another source, **convert** them into the **handwritten FD format** (as described in step 2).
 
----
-
-## 📂 Directory Structure
-
-```
-benchmark/
-│── dataset/
-│   ├── my_dataset/       # Folder for each dataset
-│   │   ├── data.csv      # Dataset file (CSV format recommended)
-│   │   ├── fds.txt       # Functional dependencies (handwritten format)
-│   │   ├── hyfd_output/  # Raw output files from HyFD (if applicable)
-│── scripts/              # Evaluation scripts
-│── README.md             # This file
-```
-
----
 
 ## 🚀 Running the Benchmark
 To run the evaluation, follow these steps:
@@ -63,13 +47,3 @@ To run the evaluation, follow these steps:
 2. Ensure the FDs are in the correct format (either handwritten or HyFD output).
 3. Execute the evaluation script (details on running the script to be added).
 
----
-
-## 📢 Notes
-- **Ensure FDs follow the correct format**, as mismatches may lead to incorrect evaluations.
-- **Key attributes are not evaluated** (i.e., FDs without LHS).
-- **The datasets should be diverse** to properly assess the FD discovery algorithms.
-
----
-
-For more details, refer to the original paper or reach out for support! 🚀
