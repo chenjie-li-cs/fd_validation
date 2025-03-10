@@ -47,7 +47,7 @@ def shannon_g1_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> floa
     x_counts = df.loc[:, lhs].value_counts().reset_index()
     x_counts.columns = lhs + ["x_count"]
     counts = xy_counts.merge(x_counts, on=lhs)
-    print(f'counts["x_count"]: {counts["x_count"]}')
+    # print(f'counts["x_count"]: {counts["x_count"]}')
     shannonYX = (
         -1.0
         * (

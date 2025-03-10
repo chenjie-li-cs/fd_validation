@@ -1,0 +1,4 @@
+- Datasource:
+    - Where: The data can be collected from folktable package
+    - How: Run gen_acs_sample to generate a sample of it, the sample columns used are from paper "The Cost of Representation by Subset Repairs"
+    - Ground Truth FDs: the FDs are from  paper "The Cost of Representation by Subset Repairs"

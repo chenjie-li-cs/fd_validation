@@ -1,0 +1,6 @@
+DecileScore -> ScoreText
+Scale_ID -> DisplayText
+RecSupervisionLevel -> RecSupervisionLevelText
+DisplayText -> Scale_ID
+RecSupervisionLevelText -> RecSupervisionLevel
+DateOfBirth -> Sex_Code_Text
