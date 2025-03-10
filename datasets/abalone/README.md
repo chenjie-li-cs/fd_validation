@@ -1,0 +1,4 @@
+- Datasource:
+    - Where: https://archive.ics.uci.edu/dataset/1/abalone
+    - How: NAN
+    - Ground Truth FDs: the FDs are from HyFD with determinant lmit=3

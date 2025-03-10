@@ -1,0 +1,14 @@
+# TABLES
+nursery.csv	1
+# COLUMN
+1.form	3
+1.health	8
+1.final evaluation	9
+1.has_nurs	2
+1.housing	5
+1.children	4
+1.parents	1
+1.social	7
+1.finance	6
+# RESULTS
+4,6,3,2,8,5,1,7->9
