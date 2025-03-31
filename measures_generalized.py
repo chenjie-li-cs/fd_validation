@@ -6,6 +6,7 @@ import itertools
 # co-occurence 
 
 def rho_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
+    df = df[lhs + rhs].dropna()
     lhs_rhs_counts = df.loc[:, lhs + rhs].value_counts().reset_index()
     lhs_rhs_counts.columns = lhs + rhs + ["lhs_rhs_count"]
     lhs_counts = df.loc[:, lhs].value_counts().reset_index()
@@ -13,6 +14,7 @@ def rho_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
 
 # g-measures
 def g1_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
+    df = df[lhs + rhs].dropna()
     xy_counts = df.loc[:, lhs + rhs].value_counts().reset_index()
     xy_counts.columns = lhs + rhs + ["xy_count"]
     x_counts = df.loc[:, lhs].value_counts().reset_index()
@@ -25,6 +27,7 @@ def g1_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
 
 
 def g1_prime_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
+    df = df[lhs + rhs].dropna()
     xy_counts = df.loc[:, lhs + rhs].value_counts().reset_index()
     xy_counts.columns = lhs + rhs + ["xy_count"]
     x_counts = df.loc[:, lhs].value_counts().reset_index()
@@ -41,6 +44,7 @@ def g1_prime_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
 
 def shannon_g1_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
     """This measure calculates 1 - H_R(Y|X), where H_R is the conditional Shannon entropy."""
+    df = df[lhs + rhs].dropna()
     r_size = df.shape[0]
     xy_counts = df.loc[:, lhs + rhs].value_counts().reset_index()
     xy_counts.columns = lhs + rhs + ["xy_count"]
@@ -76,6 +80,7 @@ def g2_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
 
 def g3_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
     """This measure is g_3 as proposed by [Kivinen & Mannila, 1995](https://doi.org/10.1016/0304-3975(95)00028-U)."""
+    df = df[lhs + rhs].dropna()
     xy_counts = df.loc[:, lhs + rhs].value_counts().reset_index()
     xy_counts.columns = lhs + rhs + ["xy_count"]
     x_groups = xy_counts.groupby(lhs)["xy_count"]
@@ -86,6 +91,7 @@ def g3_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
 
 def g3_prime_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
     """This measure is g_3 in its renormalized variant proposed by [Giannella & Robertson, 2003](https://doi.org/10.1016/j.is.2003.10.006)."""
+    df = df[lhs + rhs].dropna()
     xy_counts = df.loc[:, lhs + rhs].value_counts().reset_index()
     xy_counts.columns = lhs + rhs + ["xy_count"]
     x_groups = xy_counts.groupby(lhs)["xy_count"]
@@ -96,6 +102,7 @@ def g3_prime_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
 
 def fraction_of_information_general(df: pd.DataFrame,  lhs: List[Any], rhs: List[Any]) -> float:
     """This measures matches the function FD as defined by [Cavallo & Pittarelli, 1987](https://dblp.org/rec/conf/vldb/CavalloP87)."""
+    df = df[lhs + rhs].dropna()
     r_size = df.shape[0]
     y_counts = df.loc[:, rhs].value_counts().reset_index()
     y_counts.columns = rhs + ["y_count"]
@@ -120,6 +127,8 @@ def fraction_of_information_general(df: pd.DataFrame,  lhs: List[Any], rhs: List
 
 def reliable_fraction_of_information_general(df: pd.DataFrame,  lhs: List[Any], rhs: List[Any]) -> float:
     """This measures is reliable fraction of information as defined by [Mandros, Boley & Vreeken, 2017](https://doi.org/10.1145/3097983.3098062)."""
+    df = df[lhs + rhs].dropna()
+
     n = df.shape[0]
     x_counts = df.loc[:, lhs].value_counts()
     y_counts = df.loc[:, rhs].value_counts()
@@ -147,6 +156,7 @@ def reliable_fraction_of_information_plus_general(
     df: pd.DataFrame,  lhs: List[Any], rhs: List[Any]
 ) -> float:
     """This measure is RFI redefined by us to result in a score in the range [0;1]."""
+    df = df[lhs + rhs].dropna()    
     return max(0.0, reliable_fraction_of_information_general(df, lhs, rhs))
 
 # helper function
@@ -166,6 +176,7 @@ def smoothed_fraction_of_information_general(
     df: pd.DataFrame, lhs: List[Any], rhs: List[Any], alpha: float = 0.5
 ) -> float:
     """This measures is smoothed mutual information as defined by [Pennerath, Mandros & Vreeken, 2020](https://doi.org/10.1145/3394486.3403178)."""
+    df = df[lhs + rhs].dropna()
     r_size = df.shape[0]
     domX_size = df.loc[:, lhs].nunique()
     domY_size = df.loc[:, rhs].nunique()
@@ -175,13 +186,14 @@ def smoothed_fraction_of_information_general(
     x_counts.columns = lhs + ["x_count"]
     shannonYX_sum = 0.0
     for batch in batched(
-        itertools.product(df.loc[:, lhs].unique(), df.loc[:, rhs].unique()), 10_000_000
-    ):
+        itertools.product(df[lhs].drop_duplicates().itertuples(index=False, name=None),
+                           df[rhs].drop_duplicates().itertuples(index=False, name=None)),10_000_000
+        ):
         counts = pd.DataFrame(
             batch,
-            columns=[lhs, rhs],
+            columns=lhs+rhs,
         )
-        counts = counts.merge(xy_counts, on=[lhs, rhs], how="left")
+        counts = counts.merge(xy_counts, on=lhs+rhs, how="left")
         counts = counts.merge(x_counts, on=lhs, how="left")
         counts = counts.fillna(0.0)
         smoothedX = (counts["x_count"] + domY_size * alpha) / (
@@ -193,7 +205,7 @@ def smoothed_fraction_of_information_general(
         shannonYX_sum += (smoothedYX * np.log2(smoothedYX / smoothedX)).sum()
     smoothed_shannonYX = -1.0 * shannonYX_sum
     y_counts = df.loc[:, rhs].value_counts().reset_index()
-    y_counts.columns = [rhs, "y_count"]
+    y_counts.columns = rhs+["y_count"]
     smoothedY = (y_counts["y_count"] + domX_size * alpha) / (
         r_size + domX_size * domY_size * alpha
     )
@@ -203,6 +215,7 @@ def smoothed_fraction_of_information_general(
 
 def pdep_self_general(df: pd.DataFrame, y: List[Any]) -> float:
     """This measure is pdep(Y) as defined by [Piatetsky-Shapiro & Matheus, 1993](https://www.aaai.org/Library/Workshops/1993/ws93-02-015.php)."""
+    
     return (df.loc[:, y].value_counts() / df.shape[0]).pow(2).sum()
 
 
@@ -219,6 +232,7 @@ def pdep_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
 
 def tau_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
     """This measure is tau as defined by [Piatetsky-Shapiro & Matheus, 1993](https://www.aaai.org/Library/Workshops/1993/ws93-02-015.php)."""
+    df = df[lhs + rhs].dropna()   
     pdepXY = pdep_general(df, lhs, rhs)
     pdepY = pdep_self_general(df, rhs)
 
@@ -227,6 +241,8 @@ def tau_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
 
 def mu_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
     """This measure is mu as defined by [Piatetsky-Shapiro & Matheus, 1993](https://www.aaai.org/Library/Workshops/1993/ws93-02-015.php)."""
+    df = df[lhs + rhs].dropna()
+    
     pdepXY = pdep_general(df, lhs, rhs)
     pdepY = pdep_self_general(df, rhs)
     r_size = df.shape[0]
@@ -237,6 +253,8 @@ def mu_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
 
 def mu_plus_general(df: pd.DataFrame, lhs: List[Any], rhs: List[Any]) -> float:
     """This measure is mu redefined by us to result in a score in the range [0;1]."""
+    df = df[lhs + rhs].dropna()
+    
     return max(0.0, mu_general(df, lhs, rhs))
 
 
@@ -254,5 +272,19 @@ measures_dict = {
     'pdep': pdep_general,
     'tau': tau_general,
     'mu': mu_general,
-    'mu_plus' :mu_plus_general
+    'mu_plus' :mu_plus_general,
+    'smoothed_fraction_of_information':smoothed_fraction_of_information_general
 }
+
+
+['rho',
+ 'g1',
+ 'g3',
+ 'g2',
+ 'fraction_of_information',
+ 'pdep',
+ 'mu',
+ 'reliable_fraction_of_information',
+ 'shannon_g1',
+ 'tau',
+ 'smoothed_fraction_of_information']

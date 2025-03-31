@@ -1,0 +1,4 @@
+- Datasource:
+    - Where: UCI ML repository
+    - How: NAN
+    - Ground Truth FDs: the FDs are from HyFD

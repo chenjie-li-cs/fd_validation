@@ -49,3 +49,34 @@ To run the evaluation, follow these steps:
 
 ---
 
+
+
+# TODOs
+
+1. add some descriptions to each fd
+  a. "this fd requires further dmain expert verification"
+  b. given a dataset without FDs, estimate what kinds of fds are more likely to appear and need what kind of verification process (data dependent verification process?)
+  c. write down the exact procedure we follow:
+    a) data collection
+    b) source of fds
+    c) classification of fds (ideas including: 
+      - generate a summary for each fd about its evaluation results on exsiting FD measures
+        i) "fd X->Y performs well in shannon-entropy based measures but not logical-entropy based measures"
+        ii) "fd X->Y is a valid measure according to metric A, but lacks statistical significance based on hypothesis testing with significance level \alpha=blah"
+
+March 17th
+  a. "this fd requires further dmain expert verification"
+  b. Estimate before we see FDs? given a dataset without FDs, estimate what kinds of fds are more likely to appear and need what verification process would likely be needed (data dependent verification process?)
+  c. write down the exact procedure we follow:
+    a) data collection
+    b) source of fds
+    c) classification of fds, ideas including: 
+      - generate a summary for each fd about its evaluation results on exsiting FD measures
+        i) "fd X->Y performs well in shannon-entropy based measures but not logical-entropy based measures"
+        ii) "fd X->Y is a valid measure according to metric A, but lacks statistical significance based on hypothesis testing with significance level \alpha=blah"
+      - cache some results for reuse in calculation of some measures (like cooccurence rate between X and Y)
+
+manually add some semantically meaningful fds + negative examples too 
+also add a file under each dataset about the rationale that why certain FDs hold/ not hold
+
+

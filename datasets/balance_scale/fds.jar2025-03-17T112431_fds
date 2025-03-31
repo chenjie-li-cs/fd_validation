@@ -1,0 +1,10 @@
+# TABLES
+uci_balance_scale.csv	1
+# COLUMN
+1.right-weight	2
+1.left-distance	3
+1.target	5
+1.left-weight	4
+1.right-distance	1
+# RESULTS
+3,4,1,2->5
